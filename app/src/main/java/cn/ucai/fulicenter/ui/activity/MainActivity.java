@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import cn.ucai.fulicenter.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,15 +25,24 @@ public class MainActivity extends AppCompatActivity {
     RadioButton btnMy;
     @BindView(R.id.activity_main)
     RelativeLayout activityMain;
-
+    Unbinder bind;
+    int index=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+         bind= ButterKnife.bind(this);
     }
 
     public void onCheckedChange(View view) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(bind!=null){
+            bind.unbind();
+        }
     }
 }
