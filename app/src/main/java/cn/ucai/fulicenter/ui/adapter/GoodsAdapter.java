@@ -14,6 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.model.bean.NewGoodsBean;
+import cn.ucai.fulicenter.model.utils.ImageLoader;
 
 /**
  * Created by Administrator on 2017/3/15.
@@ -42,6 +43,7 @@ public class GoodsAdapter extends RecyclerView.Adapter {
         NewGoodsBean bean = mList.get(position);
         vh.tv1.setText(bean.getGoodsName());
         vh.tv2.setText(bean.getCurrencyPrice());
+        ImageLoader.downloadImg(context,vh.image,bean.getGoodsThumb());
     }
 
     @Override
