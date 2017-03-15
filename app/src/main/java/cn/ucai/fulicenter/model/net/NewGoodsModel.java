@@ -11,7 +11,6 @@ import cn.ucai.fulicenter.model.utils.OkHttpUtils;
  */
 
 public class NewGoodsModel implements INewGoodsModel{
-
     @Override
     public void loadData(Context context, int pageId, OnCompleteListener listener) {
         OkHttpUtils<NewGoodsBean[]> utils=new OkHttpUtils<>(context);
