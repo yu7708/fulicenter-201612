@@ -10,5 +10,5 @@ import cn.ucai.fulicenter.model.bean.NewGoodsBean;
  */
 
 public interface IBoutiqueModel {
-    void loadData(Context context, int pageId, OnCompleteListener<BoutiqueBean[]> listener);
+    void loadData(Context context, OnCompleteListener<BoutiqueBean[]> listener);
 }
