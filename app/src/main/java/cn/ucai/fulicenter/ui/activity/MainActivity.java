@@ -2,6 +2,7 @@ package cn.ucai.fulicenter.ui.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout activityMain;
     Unbinder bind;
     int index=0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
