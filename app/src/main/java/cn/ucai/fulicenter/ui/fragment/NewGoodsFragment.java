@@ -102,6 +102,15 @@ public class NewGoodsFragment extends Fragment {
 
     private void initView(View view) {
         gm=new GridLayoutManager(getActivity(), I.COLUM_NUM);
+        gm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if(position==mList.size()){
+                    return 2;
+                }
+                return 1;
+            }
+        });
         rv.setLayoutManager(gm);
         rv.setHasFixedSize(true);
         mAdapter=new GoodsAdapter(getContext(),mList);
@@ -109,6 +118,12 @@ public class NewGoodsFragment extends Fragment {
         rv.addItemDecoration(new SpaceItemDecoration(12));
         mSwipeRefreshLayout= (SwipeRefreshLayout) view.findViewById(R.id.srl);
         mRefreshHint= (TextView) view.findViewById(R.id.tvRefreshHint);
+        mSwipeRefreshLayout.setColorSchemeColors(
+                getResources().getColor(R.color.google_blue),
+                getResources().getColor(R.color.google_green),
+                getResources().getColor(R.color.google_red),
+                getResources().getColor(R.color.google_yellow)
+        );
     }
 
     private void initData(final int action) {
