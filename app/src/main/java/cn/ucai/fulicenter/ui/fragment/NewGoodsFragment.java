@@ -26,6 +26,7 @@ import cn.ucai.fulicenter.model.utils.L;
 import cn.ucai.fulicenter.model.utils.OkHttpUtils;
 import cn.ucai.fulicenter.model.utils.ResultUtils;
 import cn.ucai.fulicenter.ui.adapter.GoodsAdapter;
+import cn.ucai.fulicenter.ui.view.SpaceItemDecoration;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,6 +67,7 @@ public class NewGoodsFragment extends Fragment {
         rv.setHasFixedSize(true);
         mAdapter=new GoodsAdapter(getContext(),mList);
         rv.setAdapter(mAdapter);
+        rv.addItemDecoration(new SpaceItemDecoration(12));
     }
 
     private void initData() {
@@ -75,10 +77,10 @@ public class NewGoodsFragment extends Fragment {
                 L.e(TAG,"initData.result="+result);
                 if(result!=null&&result.length>0){
                     L.e(TAG,"initData.result.length="+result.length);
-
-                ArrayList<NewGoodsBean> newGoodsBeen = ResultUtils.array2List(result);
-                newGoodsBeen.addAll(mList);
-                mAdapter.notifyDataSetChanged();
+                ArrayList<NewGoodsBean> newGoodsBeenList = ResultUtils.array2List(result);
+                    mAdapter.addList(newGoodsBeenList);
+//                newGoodsBeenList.addAll(mList);
+            //    mAdapter.notifyDataSetChanged();
                 }
             }
             @Override

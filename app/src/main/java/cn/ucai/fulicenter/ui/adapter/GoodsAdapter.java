@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -33,7 +34,7 @@ public class GoodsAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View inflate = View.inflate(context, R.layout.newgoods, null);
-        ViewHolder vh=new GoodsViewHolder(inflate);
+        ViewHolder vh = new GoodsViewHolder(inflate);
         return vh;
     }
 
@@ -43,13 +44,24 @@ public class GoodsAdapter extends RecyclerView.Adapter {
         NewGoodsBean bean = mList.get(position);
         vh.tv1.setText(bean.getGoodsName());
         vh.tv2.setText(bean.getCurrencyPrice());
-        ImageLoader.downloadImg(context,vh.image,bean.getGoodsThumb());
+        ImageLoader.downloadImg(context, vh.image, bean.getGoodsThumb());
     }
 
     @Override
     public int getItemCount() {
         return mList != null ? mList.size() : 0;
     }
+
+    public void addList(ArrayList<NewGoodsBean> newGoodsBeenList) {
+            this.mList.clear();
+        initList(newGoodsBeenList);
+    }
+
+    private void initList(ArrayList<NewGoodsBean> newGoodsBeenList) {
+        this.mList.addAll(newGoodsBeenList);
+        notifyDataSetChanged();
+    }
+
 
     class GoodsViewHolder extends ViewHolder{
         @BindView(R.id.image)
@@ -58,9 +70,10 @@ public class GoodsAdapter extends RecyclerView.Adapter {
         TextView tv1;
         @BindView(R.id.tv2)
         TextView tv2;
-        public GoodsViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this,itemView);
+
+        GoodsViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
         }
     }
 }
