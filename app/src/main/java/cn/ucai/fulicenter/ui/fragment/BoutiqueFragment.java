@@ -66,39 +66,20 @@ public class BoutiqueFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         model=new BoutiqueModel();
-        initData(I.ACTION_DOWNLOAD);
+        initData();
 
         setListener();
     }
 
     private void setListener() {
         setPullDownListener();
-        setPullUpListener();
     }
-
-    private void setPullUpListener() {
-        rv.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                int lastPosition=gm.findLastVisibleItemPosition();
-                if(lastPosition==mAdapter.getItemCount()-1
-                        && RecyclerView.SCROLL_STATE_IDLE==newState
-                        && mAdapter.isMore()){
-                    pageId++;
-                    initData(I.ACTION_PULL_UP);
-                }
-            }
-        });
-    }
-
     private void setPullDownListener() {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 setRefresh(true);
-                pageId=1;
-                initData(I.ACTION_PULL_DOWN);
+                initData();
             }
         });
     }
@@ -121,24 +102,18 @@ public class BoutiqueFragment extends Fragment {
         );
     }
 
-    private void initData(final int action) {
+    private void initData() {
         model.loadData(getActivity(), new OnCompleteListener<BoutiqueBean[]>() {
             @Override
             public void onSuccess(BoutiqueBean[] result) {
                 L.e(TAG,"initData.result="+result);
                 setRefresh(false);
-                mAdapter.setMore(true);
                 if(result!=null&&result.length>0){
                     L.e(TAG,"initData.result.length="+result.length);
 
                 ArrayList<BoutiqueBean> BoutiqueBeanList = ResultUtils.array2List(result);
-                    if(action==I.ACTION_DOWNLOAD||action==I.ACTION_PULL_DOWN){
                         mList.clear();
-                    }
                     mList.addAll(BoutiqueBeanList);
-                    if(BoutiqueBeanList.size()<I.PAGE_SIZE_DEFAULT){
-                        mAdapter.setMore(false);
-                    }
                     mAdapter.notifyDataSetChanged();
                 }
             }
