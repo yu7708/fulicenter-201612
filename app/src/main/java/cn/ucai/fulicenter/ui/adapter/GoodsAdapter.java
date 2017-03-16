@@ -1,6 +1,7 @@
 package cn.ucai.fulicenter.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.View;
@@ -16,7 +17,9 @@ import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.NewGoodsBean;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
+import cn.ucai.fulicenter.ui.activity.GoodsDetailsActivity;
 import cn.ucai.fulicenter.ui.view.FooterViewHolder;
+import cn.ucai.fulicenter.ui.view.MFGT;
 
 /**
  * Created by Administrator on 2017/3/15.
@@ -56,10 +59,16 @@ public class GoodsAdapter extends RecyclerView.Adapter {
             return;
         }
         GoodsViewHolder vh = (GoodsViewHolder) holder;
-        NewGoodsBean bean = mList.get(position);
+        final NewGoodsBean bean = mList.get(position);
         vh.tv1.setText(bean.getGoodsName());
         vh.tv2.setText(bean.getCurrencyPrice());
         ImageLoader.downloadImg(context, vh.image, bean.getGoodsThumb());
+        vh.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MFGT.gotoDetails(context,bean.getGoodsId());
+            }
+        });
     }
 
     private int getFooterString() {
