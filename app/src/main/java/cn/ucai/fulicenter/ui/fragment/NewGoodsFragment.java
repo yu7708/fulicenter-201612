@@ -66,7 +66,6 @@ public class NewGoodsFragment extends Fragment {
         model=new NewGoodsModel();
         cat_id=getActivity().getIntent().getIntExtra(I.NewAndBoutiqueGoods.CAT_ID,cat_id);//得到传输的图片的id
         initData(I.ACTION_DOWNLOAD);
-
         setListener();
     }
 
