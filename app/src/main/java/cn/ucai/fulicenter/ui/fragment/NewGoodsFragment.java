@@ -42,7 +42,7 @@ public class NewGoodsFragment extends Fragment {
     Unbinder bind;
     INewGoodsModel model;
     int pageId=1;
-
+    int cat_id=0;
     GridLayoutManager gm;
     GoodsAdapter mAdapter;
     List<NewGoodsBean> mList=new ArrayList<>();
@@ -55,6 +55,7 @@ public class NewGoodsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_goods, container, false);
          bind= ButterKnife.bind(this, view);
+
         initView(view);
         return view;
     }
@@ -63,6 +64,7 @@ public class NewGoodsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         model=new NewGoodsModel();
+        cat_id=getActivity().getIntent().getIntExtra(I.NewAndBoutiqueGoods.CAT_ID,cat_id);//得到传输的图片的id
         initData(I.ACTION_DOWNLOAD);
 
         setListener();
@@ -127,7 +129,7 @@ public class NewGoodsFragment extends Fragment {
     }
 
     private void initData(final int action) {
-        model.loadData(getActivity(), pageId, new OnCompleteListener<NewGoodsBean[]>() {
+        model.loadData(getActivity(),cat_id, pageId, new OnCompleteListener<NewGoodsBean[]>() {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
                 L.e(TAG,"initData.result="+result);
