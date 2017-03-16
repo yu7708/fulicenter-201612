@@ -1,7 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/backClickArea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/back"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_toRightOf="@id/backClickArea"
+            >
+            <TextView
+                android:id="@+id/tvBoutiqueTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="商品名称"
+                android:textSize="18sp"/>
+        </LinearLayout>
+    </LinearLayout>
 <LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -29,10 +58,37 @@
         />
 
     <TextView
-        android:id="@+id/tvGoodsBrief"
+        android:id="@+id/tvGoodsPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="18sp"
         android:textSize="30sp"/>
+    <RelativeLayout
+        android:id="@+id/layout_image"
+        android:layout_width="match_parent"
+        android:layout_height="180dp">
+        <cn.ucai.fulicenter.ui.view.SlideAutoLoopView
+            android:id="@+id/salv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/good_detail_bg_white" />
 
+        <cn.ucai.fulicenter.ui.view.FlowIndicator
+            android:id="@+id/indicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            app:count="4"
+            app:focus="0"
+            app:focus_color="@color/good_detaul_flow_indicator_focus"
+            app:normal_color="#a1d1d1d1"
+            app:r="5dp"
+            app:space="3dp" />
+    </RelativeLayout>
+    <WebView
+        android:id="@+id/wv_good_brief"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+    </WebView>
 </LinearLayout>
