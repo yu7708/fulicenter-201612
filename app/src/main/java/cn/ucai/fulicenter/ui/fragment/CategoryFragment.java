@@ -20,6 +20,7 @@ import cn.ucai.fulicenter.model.bean.CategoryGroupBean;
 import cn.ucai.fulicenter.model.net.CategoryModel;
 import cn.ucai.fulicenter.model.net.ICategoryModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
+import cn.ucai.fulicenter.model.utils.ResultUtils;
 import cn.ucai.fulicenter.ui.adapter.CategoryAdapter;
 
 /**
@@ -45,13 +46,12 @@ public class CategoryFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         model=new CategoryModel();
+
         initData();
         initGroupData();
-        initChildData();
     }
 
     private void initData() {
-        elvCategory=new ExpandableListView(getContext());
         groupBeanList=new ArrayList<>();
         childBeanList=new ArrayList<>();
         mAdapter=new CategoryAdapter(getContext(),groupBeanList,childBeanList);
@@ -64,7 +64,14 @@ public class CategoryFragment extends Fragment {
         model.loadGroupData(getContext(), new OnCompleteListener<CategoryGroupBean[]>() {
             @Override
             public void onSuccess(CategoryGroupBean[] result) {
-
+            if(result!=null){
+                ArrayList<CategoryGroupBean> list= ResultUtils.array2List(result);
+                groupBeanList.addAll(list);
+                for(int i=0;i<groupBeanList.size();i++){
+                    childBeanList.add(new ArrayList<CategoryChildBean>());
+                    initChildData(list.get(i).getId(),i);
+                }
+            }
             }
 
 
@@ -74,11 +81,14 @@ public class CategoryFragment extends Fragment {
             }
         });
     }
-    private void initChildData(){
+    private void initChildData(int mParent_id, final int index){
         model.loadChildData(getContext(), mParent_id, new OnCompleteListener<CategoryChildBean[]>() {
             @Override
             public void onSuccess(CategoryChildBean[] result) {
-
+            if(result!=null){
+                ArrayList<CategoryChildBean> list=ResultUtils.array2List(result);
+                childBeanList.set(index,list);
+            }
             }
 
             @Override

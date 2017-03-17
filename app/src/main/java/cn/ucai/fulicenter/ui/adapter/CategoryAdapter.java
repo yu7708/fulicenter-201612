@@ -16,6 +16,8 @@ import java.util.List;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.model.bean.CategoryChildBean;
 import cn.ucai.fulicenter.model.bean.CategoryGroupBean;
+import cn.ucai.fulicenter.model.utils.ImageLoader;
+import cn.ucai.fulicenter.model.utils.ResultUtils;
 
 /**
  * Created by Administrator on 2017/3/16.
@@ -84,7 +86,9 @@ public class CategoryAdapter extends BaseExpandableListAdapter{
         else{
             groupHolder= (GroupHolder) convertView.getTag();
         }
-        groupHolder.ivGroup.setImageResource((Integer) getGroup(groupPosition));
+        CategoryGroupBean group= (CategoryGroupBean) getGroup(groupPosition);
+        groupHolder.tvGroup.setText(group.getName());
+        ImageLoader.downloadImg(context,groupHolder.ivGroup,group.getImageUrl());
         if(isExpanded){
             groupHolder.ivExpand.setImageResource(R.mipmap.expand_off);
         }else{
@@ -112,7 +116,9 @@ public class CategoryAdapter extends BaseExpandableListAdapter{
         }else{
             holder= (ChildHolder) convertView.getTag();
         }
-        holder.ivChild.setImageResource((Integer) getChild(groupPosition,childPosition));
+        CategoryChildBean list= (CategoryChildBean) getChild(groupPosition,childPosition);
+        holder.tvChild.setText(list.getName());
+        ImageLoader.downloadImg(context,holder.ivChild,list.getImageUrl());
         return convertView;
     }
 
