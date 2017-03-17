@@ -13,7 +13,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.ui.adapter.CategoryAdapter;
 import cn.ucai.fulicenter.ui.fragment.BoutiqueFragment;
+import cn.ucai.fulicenter.ui.fragment.CategoryFragment;
 import cn.ucai.fulicenter.ui.fragment.NewGoodsFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     Fragment[] mFragment;
     NewGoodsFragment mNewGoodsFragment;
     BoutiqueFragment mBoutiqueFragment;
+    CategoryFragment mCategoryFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,17 +48,21 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container,mNewGoodsFragment)
                 .add(R.id.fragment_container,mBoutiqueFragment)
+                .add(R.id.fragment_container,mCategoryFragment)
                 .hide(mBoutiqueFragment)
+                .hide(mCategoryFragment)
                 .show(mNewGoodsFragment)
                 .commit();
     }
 
     private void initFragment() {
-        mFragment=new Fragment[2];
+        mFragment=new Fragment[3];
         mNewGoodsFragment=new NewGoodsFragment();
         mBoutiqueFragment=new BoutiqueFragment();
+        mCategoryFragment=new CategoryFragment();
         mFragment[0]=mNewGoodsFragment;
         mFragment[1]=mBoutiqueFragment;
+        mFragment[2]=mCategoryFragment;
     }
 
     public void onCheckedChange(View view) {
@@ -65,6 +72,9 @@ switch (view.getId()) {
         break;
     case R.id.btnBoutique:
         index=1;
+        break;
+    case R.id.btnCategory:
+        index=2;
         break;
 }
         setFragment();

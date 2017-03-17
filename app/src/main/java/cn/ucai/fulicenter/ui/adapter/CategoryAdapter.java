@@ -4,10 +4,16 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.model.bean.CategoryChildBean;
 import cn.ucai.fulicenter.model.bean.CategoryGroupBean;
 
@@ -66,16 +72,48 @@ public class CategoryAdapter extends BaseExpandableListAdapter{
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+        GroupHolder groupHolder;
         if(convertView==null){
-
+            convertView = View.inflate(context, R.layout.item_group_category, null);
+            groupHolder=new GroupHolder();
+            groupHolder.ivGroup= (ImageView) convertView.findViewById(R.id.ivGroup);
+            groupHolder.ivExpand= (ImageView) convertView.findViewById(R.id.ivExpand);
+            groupHolder.tvGroup= (TextView) convertView.findViewById(R.id.tvGroup);
+            convertView.setTag(groupHolder);
         }
-        return null;
+        else{
+            groupHolder= (GroupHolder) convertView.getTag();
+        }
+        groupHolder.ivGroup.setImageResource((Integer) getGroup(groupPosition));
+        if(isExpanded){
+            groupHolder.ivExpand.setImageResource(R.mipmap.expand_off);
+        }else{
+            groupHolder.ivExpand.setImageResource(R.mipmap.expand_on);
+        }
+        return convertView;
     }
-
+    class GroupHolder{
+        ImageView ivGroup,ivExpand;
+        TextView tvGroup;
+    }
+    class ChildHolder{
+        ImageView ivChild;
+        TextView tvChild;
+    }
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-
-        return null;
+        ChildHolder holder=null;
+        if(convertView==null){
+            convertView=View.inflate(context,R.layout.item_child_category,null);
+            holder=new ChildHolder();
+            holder.ivChild= (ImageView) convertView.findViewById(R.id.ivChild);
+            holder.tvChild= (TextView) convertView.findViewById(R.id.tvChild);
+            convertView.setTag(holder);
+        }else{
+            holder= (ChildHolder) convertView.getTag();
+        }
+        holder.ivChild.setImageResource((Integer) getChild(groupPosition,childPosition));
+        return convertView;
     }
 
     @Override

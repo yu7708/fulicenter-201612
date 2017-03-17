@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
@@ -17,6 +20,7 @@ import cn.ucai.fulicenter.model.bean.CategoryGroupBean;
 import cn.ucai.fulicenter.model.net.CategoryModel;
 import cn.ucai.fulicenter.model.net.ICategoryModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
+import cn.ucai.fulicenter.ui.adapter.CategoryAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,7 +29,10 @@ public class CategoryFragment extends Fragment {
     @BindView(R.id.elv_category)
     ExpandableListView elvCategory;
     ICategoryModel model;
+    CategoryAdapter mAdapter;
     int mParent_id=0;
+    List<CategoryGroupBean> groupBeanList;
+    List<List<CategoryChildBean>> childBeanList;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -38,8 +45,19 @@ public class CategoryFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         model=new CategoryModel();
+        initData();
         initGroupData();
         initChildData();
+    }
+
+    private void initData() {
+        elvCategory=new ExpandableListView(getContext());
+        groupBeanList=new ArrayList<>();
+        childBeanList=new ArrayList<>();
+        mAdapter=new CategoryAdapter(getContext(),groupBeanList,childBeanList);
+        elvCategory.setAdapter(mAdapter);
+
+
     }
 
     private void initGroupData() {
@@ -48,6 +66,7 @@ public class CategoryFragment extends Fragment {
             public void onSuccess(CategoryGroupBean[] result) {
 
             }
+
 
             @Override
             public void onError(String error) {
