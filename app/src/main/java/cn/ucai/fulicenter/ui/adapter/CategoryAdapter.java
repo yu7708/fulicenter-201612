@@ -18,6 +18,7 @@ import cn.ucai.fulicenter.model.bean.CategoryChildBean;
 import cn.ucai.fulicenter.model.bean.CategoryGroupBean;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
 import cn.ucai.fulicenter.model.utils.ResultUtils;
+import cn.ucai.fulicenter.ui.view.MFGT;
 
 /**
  * Created by Administrator on 2017/3/16.
@@ -86,6 +87,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter{
         else{
             groupHolder= (GroupHolder) convertView.getTag();
         }
+        //先判断第一屏,然后就是绑定数据
         CategoryGroupBean group= (CategoryGroupBean) getGroup(groupPosition);
         groupHolder.tvGroup.setText(group.getName());
         ImageLoader.downloadImg(context,groupHolder.ivGroup,group.getImageUrl());
@@ -94,6 +96,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter{
         }else{
             groupHolder.ivExpand.setImageResource(R.mipmap.expand_on);
         }
+        //先有对象再传数据
         return convertView;
     }
     class GroupHolder{
@@ -116,9 +119,15 @@ public class CategoryAdapter extends BaseExpandableListAdapter{
         }else{
             holder= (ChildHolder) convertView.getTag();
         }
-        CategoryChildBean list= (CategoryChildBean) getChild(groupPosition,childPosition);
+        final CategoryChildBean list= (CategoryChildBean) getChild(groupPosition,childPosition);
         holder.tvChild.setText(list.getName());
         ImageLoader.downloadImg(context,holder.ivChild,list.getImageUrl());
+        holder.tvChild.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MFGT.gotoCategoryChild(context,list.getId());
+            }
+        });
         return convertView;
     }
 

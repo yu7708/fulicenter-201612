@@ -56,7 +56,7 @@ public class CategoryFragment extends Fragment {
         childBeanList=new ArrayList<>();
         mAdapter=new CategoryAdapter(getContext(),groupBeanList,childBeanList);
         elvCategory.setAdapter(mAdapter);
-
+        elvCategory.setGroupIndicator(null);//二级分类的前面的小标不显示
 
     }
 
@@ -66,6 +66,7 @@ public class CategoryFragment extends Fragment {
             public void onSuccess(CategoryGroupBean[] result) {
             if(result!=null){
                 ArrayList<CategoryGroupBean> list= ResultUtils.array2List(result);
+                groupBeanList.clear();
                 groupBeanList.addAll(list);
                 for(int i=0;i<groupBeanList.size();i++){
                     childBeanList.add(new ArrayList<CategoryChildBean>());
