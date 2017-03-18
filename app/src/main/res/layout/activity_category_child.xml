@@ -26,11 +26,37 @@
             android:text="商品名称"
             android:textSize="18sp"/>
     </LinearLayout>
-
+    <RelativeLayout
+        android:id="@+id/sss"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/backClickArea"
+        >
+        <Button
+            android:id="@+id/btn_sort_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:text="时时价格"
+            android:textSize="20sp"
+            android:drawableRight="@drawable/arrow_order_down"
+            />
+        <Button
+            android:id="@+id/btn_sort_addTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@id/btn_sort_price"
+            android:text="上架时间"
+            android:textSize="20sp"
+            android:background="@null"
+            android:drawableRight="@drawable/arrow_order_down"
+            />
+    </RelativeLayout>
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/backClickArea">
+        android:layout_below="@id/sss">
     </FrameLayout>
 </RelativeLayout>

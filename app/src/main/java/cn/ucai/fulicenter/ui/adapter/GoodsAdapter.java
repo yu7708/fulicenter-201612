@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,6 +31,8 @@ public class GoodsAdapter extends RecyclerView.Adapter {
     Context context;
     List<NewGoodsBean> mList;
     boolean isMore;
+
+    int sortBy=I.SORT_BY_ADDTIME_DESC;//默认为降序
 
     public void setMore(boolean more) {
         isMore = more;
@@ -103,13 +107,37 @@ public class GoodsAdapter extends RecyclerView.Adapter {
         }
     }
 
-    /*class FooterViewHolder extends ViewHolder{
-        @BindView(R.id.tvFooter)
-        TextView tvFooter;
+    public void setSortBy(int sortBy) {//生成对应的方法,然后调用sortBy()
+        this.sortBy = sortBy;
+        sortBy();
+    }
 
-        FooterViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-    }*/
+    private void sortBy(){//比较器用的是collection收集
+        Collections.sort(mList, new Comparator<NewGoodsBean>() {
+            @Override
+            public int compare(NewGoodsBean l, NewGoodsBean r) {
+                int result=0;
+                switch (sortBy){
+                    case I.SORT_BY_ADDTIME_ASC:
+                        result= (int) (l.getAddTime()-r.getAddTime());
+                        break;
+                    case I.SORT_BY_ADDTIME_DESC:
+                        result= (int) (r.getAddTime()-l.getAddTime());
+                        break;
+                    case I.SORT_BY_PRICE_ASC://价格前面有￥符号,要截取
+                        result=getPrice(l.getCurrencyPrice())-getPrice(r.getCurrencyPrice());
+                        break;
+                    case I.SORT_BY_PRICE_DESC:
+                        result=getPrice(r.getCurrencyPrice())-getPrice(l.getCurrencyPrice());
+                        break;
+                }
+                return result;
+            }
+        });
+        notifyDataSetChanged();//每次更新都得记住要刷新,不然不知道改变
+    }
+    private int getPrice(String p){//截取的字符是字符串,还得转换成int类型
+        String pStr = p.substring(p.indexOf("￥") + 1);
+        return Integer.valueOf(pStr);
+    }
 }

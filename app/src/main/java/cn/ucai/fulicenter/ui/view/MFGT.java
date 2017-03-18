@@ -7,9 +7,8 @@ import android.content.Intent;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.BoutiqueBean;
-import cn.ucai.fulicenter.model.bean.CategoryChildBean;
 import cn.ucai.fulicenter.ui.activity.BoutiqueChildActivity;
-import cn.ucai.fulicenter.ui.activity.CategoryActivity;
+import cn.ucai.fulicenter.ui.activity.CategoryChildActivity;
 import cn.ucai.fulicenter.ui.activity.GoodsDetailsActivity;
 import cn.ucai.fulicenter.ui.activity.MainActivity;
 
@@ -45,7 +44,7 @@ public class MFGT {
     }
 
     public static void gotoCategoryChild(Context activity, int cat_id) {
-        startActivity((Activity) activity,new Intent(activity,CategoryActivity.class)
+        startActivity((Activity) activity,new Intent(activity, CategoryChildActivity.class)
         .putExtra(I.NewAndBoutiqueGoods.CAT_ID,cat_id));//这里是跳的哪里
     }
 }

@@ -183,7 +183,7 @@ public class ResultUtils {
     }
     //20170315--14:55
     public static <T>  ArrayList<T> array2List(T[] array) {
-        List<T> list = Arrays.asList(array);
+        List<T> list = Arrays.asList(array);//就是返回一个你传进来的array的ArrayList对象.
         ArrayList<T> arrayList = new ArrayList<>(list);
         return arrayList;
     }
