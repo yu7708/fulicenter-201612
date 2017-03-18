@@ -38,6 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/backClickArea"
+        android:background="#8cf481"
         android:visibility="gone"
         >
         <Button

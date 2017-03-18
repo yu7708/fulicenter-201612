@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -106,6 +107,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter{
     class ChildHolder{
         ImageView ivChild;
         TextView tvChild;
+        LinearLayout llChild;
     }
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
@@ -115,6 +117,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter{
             holder=new ChildHolder();
             holder.ivChild= (ImageView) convertView.findViewById(R.id.ivChild);
             holder.tvChild= (TextView) convertView.findViewById(R.id.tvChild);
+            holder.llChild= (LinearLayout) convertView.findViewById(R.id.llChild);
             convertView.setTag(holder);
         }else{
             holder= (ChildHolder) convertView.getTag();
@@ -122,7 +125,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter{
         final CategoryChildBean list= (CategoryChildBean) getChild(groupPosition,childPosition);
         holder.tvChild.setText(list.getName());
         ImageLoader.downloadImg(context,holder.ivChild,list.getImageUrl());
-        holder.tvChild.setOnClickListener(new View.OnClickListener() {
+        holder.llChild.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MFGT.gotoCategoryChild(context,list.getId());
