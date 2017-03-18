@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.CategoryChildBean;
 import cn.ucai.fulicenter.model.bean.CategoryGroupBean;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
@@ -50,12 +51,12 @@ public class CategoryAdapter extends BaseExpandableListAdapter{
     }
 
     @Override
-    public Object getGroup(int groupPosition) {//得到当前的数
+    public CategoryGroupBean getGroup(int groupPosition) {//得到当前的数
         return groupBeanList.get(groupPosition);
     }
 
     @Override
-    public Object getChild(int groupPosition, int childPosition) {
+    public CategoryChildBean getChild(int groupPosition, int childPosition) {
         return childBeanList.get(groupPosition).get(childPosition);
     }
 
@@ -110,7 +111,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter{
         LinearLayout llChild;
     }
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         ChildHolder holder=null;
         if(convertView==null){
             convertView=View.inflate(context,R.layout.item_child_category,null);
@@ -128,7 +129,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter{
         holder.llChild.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MFGT.gotoCategoryChild(context,list.getId());
+                MFGT.gotoCategoryChild(context,list.getId(),getGroup(groupPosition).getName());
             }
         });
         return convertView;

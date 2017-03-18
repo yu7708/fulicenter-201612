@@ -43,8 +43,9 @@ public class MFGT {
                .putExtra(I.Goods.KEY_GOODS_ID,goodsId));
     }
 
-    public static void gotoCategoryChild(Context activity, int cat_id) {
+    public static void gotoCategoryChild(Context activity, int cat_id,String groupName) {
         startActivity((Activity) activity,new Intent(activity, CategoryChildActivity.class)
-        .putExtra(I.NewAndBoutiqueGoods.CAT_ID,cat_id));//这里是跳的哪里
+        .putExtra(I.NewAndBoutiqueGoods.CAT_ID,cat_id)
+        .putExtra(I.CategoryGroup.NAME,groupName));//这里是跳的哪里
     }
 }
