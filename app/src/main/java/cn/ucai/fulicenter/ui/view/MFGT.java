@@ -59,7 +59,11 @@ public class MFGT {
         startActivity(activity,LoginActivity.class);
     }
 
-    public static void gotoRegister(Activity activity) {
-        startActivity(activity,RegisterActivity.class);
+    public static void gotoRegister(Activity activity) {//设置返回结果集,使跳转的登录页面有返回集,
+        startActivityForResult(activity,new Intent(activity,RegisterActivity.class),I.REQUEST_CODE_REGISTER);
+    }
+    public static void startActivityForResult(Activity activity,Intent intent,int requestCode){
+        activity.startActivityForResult(intent,requestCode);
+        activity.overridePendingTransition(R.anim.push_left_in,R.anim.push_left_out);
     }
 }

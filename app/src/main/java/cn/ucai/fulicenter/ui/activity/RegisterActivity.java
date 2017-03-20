@@ -1,5 +1,6 @@
 package cn.ucai.fulicenter.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -100,6 +101,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerSuccess() {
+        setResult(RESULT_OK,new Intent().putExtra(I.User.USER_NAME,userName));//代表执行成功了,传递数据到登录的用户名
         CommonUtils.showShortToast(R.string.register_success);
         MFGT.finish(RegisterActivity.this);
     }
@@ -114,7 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
             etUsername.setError(getString(R.string.user_name_connot_be_empty));
             return false;
         }
-        if(!userName.matches("[a-zA-z]\\w{5,15}")){//判断违法字符,取6到16位
+        if(!userName.matches("[a-zA-z]\\w{5,15}")){//判断违法字符,取6到16位,取非,判断不是所给情况
             etUsername.requestFocus();
             etUsername.setError(getString(R.string.illegal_user_name));
             return false;
@@ -134,7 +136,7 @@ public class RegisterActivity extends AppCompatActivity {
             etOkPassword.setError(getString(R.string.confirm_password_connot_be_empty));
             return false;
         }
-        if(!password.equals(okPassword)){//两次密码是否相等
+        if(!password.equals(okPassword)){//两次密码是否相等,前面是!,判断不一致
             etOkPassword.requestFocus();
             etOkPassword.setError(getString(R.string.two_input_password));
             return false;
