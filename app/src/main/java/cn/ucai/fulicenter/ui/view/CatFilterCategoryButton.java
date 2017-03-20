@@ -95,4 +95,10 @@ public class CatFilterCategoryButton extends Button {
         mAdapter = new CatFilterAdapter(mContext, mList,groupName);
         gv.setAdapter(mAdapter);
     }
+
+    public void release() {
+        if(mPopupWindow!=null){
+            mPopupWindow.dismiss();
+        }
+    }
 }

@@ -85,4 +85,12 @@ public class CategoryChildActivity extends AppCompatActivity {
         sss.setVisibility(change ? View.GONE : View.VISIBLE);
         change = !change;
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(cfcbFilter!=null){
+            cfcbFilter.release();
+        }
+    }
 }
