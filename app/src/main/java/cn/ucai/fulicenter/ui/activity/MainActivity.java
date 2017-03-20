@@ -16,7 +16,9 @@ import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.ui.adapter.CategoryAdapter;
 import cn.ucai.fulicenter.ui.fragment.BoutiqueFragment;
 import cn.ucai.fulicenter.ui.fragment.CategoryFragment;
+import cn.ucai.fulicenter.ui.fragment.MyFragment;
 import cn.ucai.fulicenter.ui.fragment.NewGoodsFragment;
+import cn.ucai.fulicenter.ui.view.MFGT;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     NewGoodsFragment mNewGoodsFragment;
     BoutiqueFragment mBoutiqueFragment;
     CategoryFragment mCategoryFragment;
+    MyFragment mMyFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,20 +52,24 @@ public class MainActivity extends AppCompatActivity {
                 .add(R.id.fragment_container,mNewGoodsFragment)
                 .add(R.id.fragment_container,mBoutiqueFragment)
                 .add(R.id.fragment_container,mCategoryFragment)
+                .add(R.id.fragment_container,mMyFragment)
                 .hide(mBoutiqueFragment)
                 .hide(mCategoryFragment)
+                .hide(mMyFragment)
                 .show(mNewGoodsFragment)
                 .commit();
     }
 
     private void initFragment() {
-        mFragment=new Fragment[3];
+        mFragment=new Fragment[4];
         mNewGoodsFragment=new NewGoodsFragment();
         mBoutiqueFragment=new BoutiqueFragment();
         mCategoryFragment=new CategoryFragment();
+        mMyFragment=new MyFragment();
         mFragment[0]=mNewGoodsFragment;
         mFragment[1]=mBoutiqueFragment;
         mFragment[2]=mCategoryFragment;
+        mFragment[3]=mMyFragment;
     }
 
     public void onCheckedChange(View view) {
@@ -75,6 +82,9 @@ switch (view.getId()) {
         break;
     case R.id.btnCategory:
         index=2;
+        break;
+    case R.id.btnMy:
+        index=3;
         break;
 }
         setFragment();

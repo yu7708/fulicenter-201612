@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -31,6 +32,7 @@ import cn.ucai.fulicenter.model.utils.CommonUtils;
 import cn.ucai.fulicenter.model.utils.ConvertUtils;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
 import cn.ucai.fulicenter.ui.activity.MainActivity;
+import cn.ucai.fulicenter.ui.adapter.CatFilterAdapter;
 import cn.ucai.fulicenter.ui.adapter.CategoryAdapter;
 
 /**
@@ -41,9 +43,8 @@ public class CatFilterCategoryButton extends Button {
     boolean isExpand;
     Context mContext;
     PopupWindow mPopupWindow;
-
     GridView gv;
-    catfilterChildAdapter mAdapter;
+    CatFilterAdapter mAdapter;
     ArrayList<CategoryChildBean> mList;
 
     public CatFilterCategoryButton(Context context, AttributeSet attrs) {
@@ -56,9 +57,8 @@ public class CatFilterCategoryButton extends Button {
         if(mPopupWindow==null) {
             mPopupWindow = new PopupWindow(mContext);
             mPopupWindow.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
-            mPopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            mPopupWindow.setHeight(400);
             //mPopupWindow.setBackgroundDrawable(new ColorDrawable(0xaaaaa));
-
             mPopupWindow.setContentView(gv);
         }
         mPopupWindow.showAsDropDown(this);
@@ -91,62 +91,8 @@ public class CatFilterCategoryButton extends Button {
         this.setText(groupName);
         mList=list;
         gv = new GridView(mContext);
-        mAdapter = new catfilterChildAdapter(mContext, mList);
+        gv.setNumColumns(GridView.AUTO_FIT);
+        mAdapter = new CatFilterAdapter(mContext, mList,groupName);
         gv.setAdapter(mAdapter);
-    }
-
-
-    class catfilterChildAdapter extends BaseAdapter {
-        Context mContext;
-        ArrayList<CategoryChildBean> mList;
-
-        public catfilterChildAdapter(Context mContext, ArrayList<CategoryChildBean> mList) {
-            this.mContext = mContext;
-            this.mList = mList;
-        }
-
-        @Override
-        public int getCount() {
-            return mList != null ? mList.size() : 0;
-        }
-
-        @Override
-        public CategoryChildBean getItem(int position) {
-            return mList.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            CatFilterViewHolder vh=null;
-            if(convertView==null){
-            convertView=View.inflate(mContext, R.layout.item_cat_filter, null);
-                vh=new CatFilterViewHolder(convertView);
-                convertView.setTag(vh);
-            }else{
-                vh= (CatFilterViewHolder) convertView.getTag();
-            }
-            CategoryChildBean bean=mList.get(position);
-            vh.tvChild.setText(bean.getName());
-            ImageLoader.downloadImg(mContext,vh.ivChild,bean.getImageUrl());
-            return convertView;
-        }
-
-         class CatFilterViewHolder {
-            @BindView(R.id.ivChild)
-            ImageView ivChild;
-            @BindView(R.id.tvChild)
-            TextView tvChild;
-            @BindView(R.id.llChild)
-            LinearLayout llChild;
-
-            CatFilterViewHolder(View view) {
-                ButterKnife.bind(this, view);
-            }
-        }
     }
 }
