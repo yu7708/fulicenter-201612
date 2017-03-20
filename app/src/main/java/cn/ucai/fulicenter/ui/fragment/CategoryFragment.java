@@ -33,7 +33,7 @@ public class CategoryFragment extends Fragment {
     CategoryAdapter mAdapter;
     int mParent_id=0;
     List<CategoryGroupBean> groupBeanList;
-    List<List<CategoryChildBean>> childBeanList;
+    ArrayList<ArrayList<CategoryChildBean>> childBeanList;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

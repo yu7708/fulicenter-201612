@@ -7,11 +7,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.I;
+import cn.ucai.fulicenter.model.bean.CategoryChildBean;
 import cn.ucai.fulicenter.ui.fragment.NewGoodsFragment;
 import cn.ucai.fulicenter.ui.view.CatFilterCategoryButton;
 
@@ -22,7 +25,7 @@ public class CategoryChildActivity extends AppCompatActivity {
     int sortBy = I.SORT_BY_ADDTIME_DESC;//当前的排序
 
     String groupName;
-
+    ArrayList<CategoryChildBean> mList;
 
     NewGoodsFragment newGoodsFragment;
     @BindView(R.id.sss)
@@ -43,11 +46,12 @@ public class CategoryChildActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, newGoodsFragment).commit();
         groupName = getIntent().getStringExtra(I.CategoryGroup.NAME);
+        mList= (ArrayList<CategoryChildBean>) getIntent().getSerializableExtra(I.CategoryChild.DATA);
         initView();
     }
 
     private void initView() {
-        cfcbFilter.setText(groupName);
+        cfcbFilter.initView(groupName,mList);
     }
 
     @OnClick(R.id.backClickArea)

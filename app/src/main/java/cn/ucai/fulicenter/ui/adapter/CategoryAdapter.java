@@ -29,9 +29,9 @@ import cn.ucai.fulicenter.ui.view.MFGT;
 public class CategoryAdapter extends BaseExpandableListAdapter{
     Context context;
     List<CategoryGroupBean> groupBeanList;
-    List<List<CategoryChildBean>> childBeanList;
+   ArrayList<ArrayList<CategoryChildBean>> childBeanList;
 
-    public CategoryAdapter(Context context, List<CategoryGroupBean> groupBeanList, List<List<CategoryChildBean>> childBeanList) {
+    public CategoryAdapter(Context context, List<CategoryGroupBean> groupBeanList, ArrayList<ArrayList<CategoryChildBean>> childBeanList) {
         this.context = context;
         this.groupBeanList = groupBeanList;
         this.childBeanList = childBeanList;
@@ -129,7 +129,8 @@ public class CategoryAdapter extends BaseExpandableListAdapter{
         holder.llChild.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MFGT.gotoCategoryChild(context,list.getId(),getGroup(groupPosition).getName());
+                MFGT.gotoCategoryChild(context,list.getId(),getGroup(groupPosition).getName()
+                ,childBeanList.get(groupPosition));
             }
         });
         return convertView;
