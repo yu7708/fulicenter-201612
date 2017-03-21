@@ -101,6 +101,16 @@ public class User {
         result = 31 * result + getMavatarLastUpdateTime().hashCode();
         return result;
     }
+    //downloadAvatar?name_or_hxid=gsd123&avatarType=user_avatar&m_avatar_suffix=.jpg&width=80&height=80
+    public String getAvatar(){
+    //头像下载的拼接
+        StringBuilder sb=new StringBuilder(I.DOWNLOAD_AVATAR_URL);
+        sb.append(I.NAME_OR_HXID).append(I.EQUAL).append(this.getMuserName())
+                .append(I.AND).append(I.AVATAR_TYPE).append(I.EQUAL).append(this.getMavatarType())
+                .append(I.AND).append(I.AVATAR_SUFFIX).append(I.EQUAL).append(this.getMavatarSuffix())
+                .append("&width=200&height=200");
+        return sb.toString();
+    }
 
     @Override
     public String toString() {

@@ -9,9 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/main_orange">
-
         <Button
-            android:id="@+id/btn_setting"
+            android:id="@+id/btn_center_setting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -21,11 +20,17 @@
             android:textColor="#fff"
             android:textSize="20sp" />
 
+<LinearLayout
+    android:id="@+id/center_user_info"
+    android:layout_below="@id/btn_center_setting"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
         <LinearLayout
             android:id="@+id/ll_avatar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/btn_setting"
+            android:layout_below="@id/btn_center_setting"
             android:layout_marginTop="15dp"
             android:orientation="horizontal">
 
@@ -139,7 +144,7 @@
                     android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
-
+</LinearLayout>
     </RelativeLayout>
 
     <RelativeLayout

@@ -123,10 +123,12 @@ switch (view.getId()) {
 
     private void setFragment() {
         if(currentIndex!=index){
-            getSupportFragmentManager().beginTransaction()
-                    .show(mFragment[index])
-                    .hide(mFragment[currentIndex])
-            .commit();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.hide(mFragment[currentIndex]);
+            if(!mFragment[index].isAdded()){
+                ft.add(R.id.fragment_container,mFragment[index]);
+            }
+            ft.show(mFragment[index]).commit();
             currentIndex=index;
         }
     }
@@ -138,7 +140,7 @@ switch (view.getId()) {
         setRadioButton();
     }
 
-    private void setRadioButton() {
+    private void setRadioButton() {//返回现在的按钮
         for (int i=0;i<mRadioButton.length;i++){
             if(i==currentIndex){
                 mRadioButton[i].setChecked(true);
