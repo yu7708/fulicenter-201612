@@ -21,7 +21,9 @@ import cn.ucai.fulicenter.model.net.IUserModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.net.UserModel;
 import cn.ucai.fulicenter.model.utils.CommonUtils;
+import cn.ucai.fulicenter.model.utils.MD5;
 import cn.ucai.fulicenter.model.utils.ResultUtils;
+import cn.ucai.fulicenter.model.utils.SharedPreferenceUtils;
 import cn.ucai.fulicenter.ui.view.MFGT;
 
 /**
@@ -59,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
     }
     private void login() {
         if(checkInput()){
-            mModel.login(LoginActivity.this, userName, password, new OnCompleteListener<String>() {
+            mModel.login(LoginActivity.this, userName, MD5.getMessageDigest(password), new OnCompleteListener<String>() {
                 @Override
                 public void onSuccess(String r) {
                     Result result = ResultUtils.getResultFromJson(r, User.class);
@@ -88,9 +90,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginSuccess(User user) {
         FuLiCenterApplication.setCurrentUser(user);
+        SharedPreferenceUtils.getInstance().setUserName(user.getMuserName());//如果得到单例,设置名称
+        MFGT.finish(LoginActivity.this);
     }
 
-    private boolean checkInput() { if(TextUtils.isEmpty(userName)){
+    private boolean checkInput() {
+        userName=etUsername.getText().toString().trim();
+        password=etPassword.getText().toString().trim();
+        if(TextUtils.isEmpty(userName)){
         etUsername.requestFocus();
         etUsername.setError(getString(R.string.user_name_connot_be_empty));
         return false;
