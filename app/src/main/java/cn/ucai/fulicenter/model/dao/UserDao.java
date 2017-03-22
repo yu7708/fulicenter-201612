@@ -2,7 +2,9 @@ package cn.ucai.fulicenter.model.dao;
 
 import android.content.Context;
 
+import cn.ucai.fulicenter.application.FuLiCenterApplication;
 import cn.ucai.fulicenter.model.bean.User;
+import cn.ucai.fulicenter.model.utils.SharedPreferenceUtils;
 
 /**
  * Created by Administrator on 2017/3/21.
@@ -37,5 +39,11 @@ public class UserDao {//数据库的逻辑都放到Dao层
             return null;
         }
         return DBManager.getInstance().getUserInfo(username);
+    }
+
+    public void logout() {
+        FuLiCenterApplication.setCurrentUser(null);
+        SharedPreferenceUtils.getInstance().removeString();
+        DBManager.getInstance().CloseDB();
     }
 }

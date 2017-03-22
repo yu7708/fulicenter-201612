@@ -32,7 +32,8 @@ public class DBManager {
             values.put(UserDao.USER_COLUMN_AVATAR_SUFFIX,user.getMavatarSuffix());
             values.put(UserDao.USER_COLUMN_AVATAR_TYPE,user.getMavatarType());
             values.put(UserDao.USER_COLUMN_AVATAR_UPDATE_TIME,user.getMavatarLastUpdateTime());
-            return database.insert(UserDao.USER_TABLE_NAME,null,values)!=-1;
+            //return database.insert(UserDao.USER_TABLE_NAME,null,values)!=-1;
+            return database.replace(UserDao.USER_TABLE_NAME,null,values)!=-1;
             //如果错误返回-1
         }
         return false;
@@ -58,5 +59,9 @@ public class DBManager {
             }
         }
         return null;
+    }
+
+    public void CloseDB() {
+        mHelper.CloseDB();
     }
 }

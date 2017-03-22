@@ -137,6 +137,12 @@ switch (view.getId()) {
     protected void onResume() {//在跳转后,返回的是这句话
         super.onResume();
         Log.e(TAG,"index="+index+",currentIndex="+currentIndex);
+        if(index==4){
+            if(FuLiCenterApplication.getCurrentUser()==null){
+                index=0;
+            }
+            setFragment();
+        }
         setRadioButton();
     }
 
