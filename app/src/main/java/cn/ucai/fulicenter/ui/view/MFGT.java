@@ -56,8 +56,9 @@ public class MFGT {
         .putExtra(I.CategoryChild.DATA,list));//这里是跳的哪里
     }
 
-    public static void gotoLogin(Activity activity) {
-        startActivity(activity,LoginActivity.class);
+    public static void gotoLogin(Activity activity, int requestCode) {
+        //startActivity(activity,LoginActivity.class);
+        startActivityForResult(activity,new Intent(activity,LoginActivity.class),requestCode);
     }
 
     public static void gotoRegister(Activity activity) {//设置返回结果集,使跳转的登录页面有返回集,

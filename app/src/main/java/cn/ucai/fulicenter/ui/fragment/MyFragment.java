@@ -44,11 +44,19 @@ public class MyFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initData();
+    }
+
+    public void initData(){
         user = FuLiCenterApplication.getCurrentUser();//得到application里的数据
         //如果为空,没登陆跳转至登录页面,否则显示信息
-        if(user==null){
-            MFGT.gotoLogin(getActivity());
-        }else{
+        if(user!=null) {
             showUserInfo();
         }
     }

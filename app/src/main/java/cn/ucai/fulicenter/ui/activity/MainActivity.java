@@ -1,5 +1,6 @@
 package cn.ucai.fulicenter.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -15,6 +16,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.FuLiCenterApplication;
+import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.ui.adapter.CategoryAdapter;
 import cn.ucai.fulicenter.ui.fragment.BoutiqueFragment;
 import cn.ucai.fulicenter.ui.fragment.CartFragment;
@@ -105,14 +107,14 @@ switch (view.getId()) {
         break;
     case R.id.btnCart:
         if(FuLiCenterApplication.getCurrentUser()==null){
-            MFGT.gotoLogin(MainActivity.this);
+            MFGT.gotoLogin(MainActivity.this, I.REQUEST_CODE_LOGIN_FROM_CART);
         }else{
             index=3;
         }
         break;
     case R.id.btnMy:
         if(FuLiCenterApplication.getCurrentUser()==null){
-            MFGT.gotoLogin(MainActivity.this);
+            MFGT.gotoLogin(MainActivity.this,I.REQUEST_CODE_LOGIN);
         }else{
             index=4;
         }
@@ -151,6 +153,20 @@ switch (view.getId()) {
             if(i==currentIndex){
                 mRadioButton[i].setChecked(true);
             }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+            if(requestCode==I.REQUEST_CODE_LOGIN){
+                index=4;
+            }else if(requestCode==I.REQUEST_CODE_LOGIN_FROM_CART){
+                index=3;
+            }
+            setFragment();
+            setRadioButton();
         }
     }
 
