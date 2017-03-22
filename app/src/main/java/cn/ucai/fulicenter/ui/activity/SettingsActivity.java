@@ -58,8 +58,13 @@ public class SettingsActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_logout)
     public void onClick() {
-       UserDao.getInstance(SettingsActivity.this).logout();//清空Application数据,清空sharedPreference,数据库关闭
+        UserDao.getInstance(SettingsActivity.this).logout();//清空Application数据,清空sharedPreference,数据库关闭
         MFGT.gotoLogin(SettingsActivity.this, I.REQUEST_CODE_LOGIN);
         finish();
+    }
+
+    @OnClick(R.id.rl_updateNick)
+    public void updateNick() {
+        MFGT.gotoUpdateNick(SettingsActivity.this);
     }
 }
