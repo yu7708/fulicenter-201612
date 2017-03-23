@@ -50,7 +50,7 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     GoodsDetailsBean bean;
     @BindView(R.id.ivGoodsCollect)
     ImageView ivGoodsCollect;
-
+    boolean isCollects=false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,30 +76,39 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     private void initAddCollect() {
         User user = FuLiCenterApplication.getCurrentUser();
         if (user != null) {
-            model.loadCollectStatus(GoodsDetailsActivity.this, goodsId, user.getMuserName(),
-                    new OnCompleteListener<MessageBean>() {
-                        @Override
-                        public void onSuccess(MessageBean msg) {
-                            if (msg != null && msg.isSuccess()) {
-                                setCollectStatus(true);
-                                Toast.makeText(GoodsDetailsActivity.this, "添加成功", Toast.LENGTH_SHORT);
-                            } else {
-                                setCollectStatus(false);
-                                Toast.makeText(GoodsDetailsActivity.this, "添加失败", Toast.LENGTH_SHORT);
-                            }
-                        }
-
-                        @Override
-                        public void onError(String error) {
-                            setCollectStatus(false);
-                            Toast.makeText(GoodsDetailsActivity.this, "添加失败", Toast.LENGTH_SHORT);
-                        }
-                    });
+          collection(I.ACTION_IS_COLLECT,user);
         }
     }
 
-    private void setCollectStatus(boolean isCollects) {//设置收藏图片的状态
-        ivGoodsCollect.setImageResource(isCollects?R.mipmap.bg_collect_out:R.mipmap.bg_collect_in);
+    private void collection(final int action, User user) {
+        model.loadCollectStatus(GoodsDetailsActivity.this,action,goodsId, user.getMuserName(),
+                new OnCompleteListener<MessageBean>() {
+                    @Override
+                    public void onSuccess(MessageBean msg) {
+                        if (msg != null && msg.isSuccess()) {
+                            isCollects=true;
+                            if(action==I.ACTION_DELETE_COLLECT){
+                                isCollects=false;
+                            }
+                        }else{
+                            isCollects=false;
+                            if(action==I.ACTION_DELETE_COLLECT){
+                                isCollects=true;
+                            }
+                        }
+                        setCollectStatus();
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        isCollects=false;
+                        Toast.makeText(GoodsDetailsActivity.this, "添加失败", Toast.LENGTH_SHORT);
+                    }
+                });
+    }
+
+    private void setCollectStatus() {//设置收藏图片的状态
+        ivGoodsCollect.setImageResource(isCollects ? R.mipmap.bg_collect_out : R.mipmap.bg_collect_in);
     }
 
     private void initData() {
@@ -160,4 +169,19 @@ public class GoodsDetailsActivity extends AppCompatActivity {
         MFGT.finish(GoodsDetailsActivity.this);
     }
 
+    @OnClick(R.id.ivGoodsCollect)
+    public void onCollect() {
+        User user=FuLiCenterApplication.getCurrentUser();
+        if(user==null){
+            MFGT.gotoLogin(GoodsDetailsActivity.this,0);
+        }else{
+            if(isCollects){
+                //取消收藏
+                collection(I.ACTION_DELETE_COLLECT,user);
+            }else{
+                //添加收藏
+                collection(I.ACTION_ADD_COLLECT,user);
+            }
+        }
+    }
 }

@@ -12,5 +12,5 @@ import cn.ucai.fulicenter.model.bean.NewGoodsBean;
 
 public interface IGoodsModel {
     void loadData(Context context, int goods_id, OnCompleteListener<GoodsDetailsBean> listener);
-    void loadCollectStatus(Context context, int goodsId, String userName, OnCompleteListener<MessageBean> listener);
+    void loadCollectStatus(Context context,int action, int goodsId, String userName, OnCompleteListener<MessageBean> listener);
 }

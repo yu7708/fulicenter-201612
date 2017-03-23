@@ -22,9 +22,15 @@ public class GoodsModel implements IGoodsModel{
                 .execute(listener);
     }
     @Override
-    public void loadCollectStatus(Context context, int goodsId, String userName, OnCompleteListener<MessageBean> listener) {
+    public void loadCollectStatus(Context context,int action, int goodsId, String userName, OnCompleteListener<MessageBean> listener) {
+        String request=I.REQUEST_IS_COLLECT;
+        if(action==I.ACTION_ADD_COLLECT){
+            request=I.REQUEST_ADD_COLLECT;
+        }else if(action==I.ACTION_DELETE_COLLECT){
+            request=I.REQUEST_DELETE_COLLECT;
+        }
         OkHttpUtils<MessageBean> utils=new OkHttpUtils<>(context);
-        utils.setRequestUrl(I.REQUEST_IS_COLLECT)
+        utils.setRequestUrl(request)
                 .addParam(I.Collect.GOODS_ID,goodsId+"")
                 .addParam(I.Collect.USER_NAME,userName)
                 .targetClass(MessageBean.class)
