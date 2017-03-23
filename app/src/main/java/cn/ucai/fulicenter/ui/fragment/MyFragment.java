@@ -21,7 +21,6 @@ import cn.ucai.fulicenter.model.net.IUserModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.net.UserModel;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
-import cn.ucai.fulicenter.ui.activity.SettingsActivity;
 import cn.ucai.fulicenter.ui.view.MFGT;
 
 /**
@@ -38,6 +37,7 @@ public class MyFragment extends Fragment {
 
     User user;
     IUserModel mModel;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class MyFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mModel=new UserModel();
+        mModel = new UserModel();
         initData();
     }
 
@@ -78,14 +78,15 @@ public class MyFragment extends Fragment {
         tvUsername.setText(user.getMuserNick());
         ImageLoader.downloadImg(getContext(), ivAvatar, user.getAvatar());
     }
+
     private void collectGoodsCount() {
         mModel.collectGoods(getContext(), user.getMuserName(), new OnCompleteListener<MessageBean>() {
             @Override
             public void onSuccess(MessageBean msg) {
-                if(msg!=null&&msg.isSuccess()){
+                if (msg != null && msg.isSuccess()) {
                     collectGoodsNum.setText(msg.getMsg());
-                }else{
-                    collectGoodsNum.setText(0+"");
+                } else {
+                    collectGoodsNum.setText(0 + "");
                 }
             }
 
@@ -94,5 +95,10 @@ public class MyFragment extends Fragment {
 
             }
         });
+    }
+
+    @OnClick(R.id.ll_Collect)
+    public void onClick() {
+        MFGT.gotoCollection(getContext());
     }
 }

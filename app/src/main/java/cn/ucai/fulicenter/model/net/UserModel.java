@@ -5,6 +5,7 @@ import android.content.Context;
 import java.io.File;
 
 import cn.ucai.fulicenter.application.I;
+import cn.ucai.fulicenter.model.bean.CollectBean;
 import cn.ucai.fulicenter.model.bean.MessageBean;
 import cn.ucai.fulicenter.model.utils.OkHttpUtils;
 
@@ -63,6 +64,16 @@ public class UserModel implements IUserModel{
         utils.setRequestUrl(I.REQUEST_FIND_COLLECT_COUNT)
                 .addParam(I.Collect.USER_NAME,username)
                 .targetClass(MessageBean.class)
+                .execute(listener);
+    }
+
+    @Override
+    public void loadCollect(Context context, String userName, int pageId, int pageSize, OnCompleteListener<CollectBean[]> listener) {
+        OkHttpUtils<CollectBean[]> utils=new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_FIND_COLLECTS)
+                .addParam(I.PAGE_ID,pageId+"")
+                .addParam(I.PAGE_SIZE,"10")
+                .targetClass(CollectBean[].class)
                 .execute(listener);
     }
 }

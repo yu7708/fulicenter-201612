@@ -25,6 +25,7 @@ import cn.ucai.fulicenter.model.utils.CommonUtils;
 import cn.ucai.fulicenter.ui.view.FlowIndicator;
 import cn.ucai.fulicenter.ui.view.MFGT;
 import cn.ucai.fulicenter.ui.view.SlideAutoLoopView;
+import cn.ucai.fulicenter.ui.view.fangdou.AntiShake;
 
 /**
  * Created by Administrator on 2017/3/16.
@@ -52,6 +53,7 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     ImageView ivGoodsCollect;
     boolean isCollects=false;
 
+    AntiShake util=new AntiShake();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,6 +173,7 @@ public class GoodsDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.ivGoodsCollect)
     public void onCollect() {
+        if(util.check()) return;
         User user=FuLiCenterApplication.getCurrentUser();
         if(user==null){
             MFGT.gotoLogin(GoodsDetailsActivity.this,0);
