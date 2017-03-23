@@ -18,6 +18,7 @@ import butterknife.OnClick;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.FuLiCenterApplication;
 import cn.ucai.fulicenter.application.I;
+import cn.ucai.fulicenter.model.bean.MessageBean;
 import cn.ucai.fulicenter.model.bean.Result;
 import cn.ucai.fulicenter.model.bean.User;
 import cn.ucai.fulicenter.model.dao.UserDao;
@@ -67,7 +68,9 @@ public class SettingsActivity extends AppCompatActivity {
         userName.setText(user.getMuserName());
         userNick.setText(user.getMuserNick());
         ImageLoader.downloadImg(SettingsActivity.this, ivUserProfileAvatar, user.getAvatar());
+
     }
+
 
     @OnClick(R.id.backClickArea)
     public void backArea() {
@@ -157,4 +160,5 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                 });
     }
+
 }

@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 
 import cn.ucai.fulicenter.model.bean.User;
+import cn.ucai.fulicenter.model.dao.UserDao;
+import cn.ucai.fulicenter.model.utils.SharedPreferenceUtils;
 
 /**
  * Created by Administrator on 2017/3/14.
@@ -23,6 +25,10 @@ public class FuLiCenterApplication extends Application{
     }
 
     public static User getCurrentUser() {
+        if(currentUser==null){
+            String username= SharedPreferenceUtils.getInstance().getUserName();
+            currentUser= UserDao.getInstance(instance).getUserInfo(username);
+        }
         return currentUser;
     }
 
