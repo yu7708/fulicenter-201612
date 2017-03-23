@@ -71,6 +71,7 @@ public class UserModel implements IUserModel{
     public void loadCollect(Context context, String userName, int pageId, int pageSize, OnCompleteListener<CollectBean[]> listener) {
         OkHttpUtils<CollectBean[]> utils=new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_FIND_COLLECTS)
+                .addParam(I.Collect.USER_NAME,userName)
                 .addParam(I.PAGE_ID,pageId+"")
                 .addParam(I.PAGE_SIZE,"10")
                 .targetClass(CollectBean[].class)
