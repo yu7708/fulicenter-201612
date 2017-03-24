@@ -117,6 +117,7 @@ public class CollectsAdapter extends RecyclerView.Adapter {
         //这样做的好处就是view就是view,adapter就是adapter
         @OnClick(R.id.dd)
         public void onClick(){
+            //互调不好,放在一起写
             CollectBean collectBean= (CollectBean) dd.getTag();
             removeCollect(collectBean.getGoodsId(),collectBean);
         }

@@ -1,8 +1,11 @@
 package cn.ucai.fulicenter.ui.activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,6 +35,7 @@ import cn.ucai.fulicenter.ui.view.fangdou.AntiShake;
  * Created by Administrator on 2017/3/16.
  */
 public class GoodsDetailsActivity extends AppCompatActivity {
+    private static final String TAG = GoodsDetailsActivity.class.getSimpleName();
     IGoodsModel model;
     int goodsId = 0;
     @BindView(R.id.tvGoodsName)
@@ -54,6 +58,7 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     ImageView ivGoodsCollect;
     boolean isCollects=false;
     AntiShake util=new AntiShake();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,8 +172,26 @@ public class GoodsDetailsActivity extends AppCompatActivity {
         return null;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.e(TAG,"onDestroy.isCollect:"+isCollects);
+
+    }
+   /* startActivityForResult((Activity) activity,new Intent(activity, GoodsDetailsActivity.class)
+    .putExtra(I.Goods.KEY_GOODS_ID,goodsId),I.REQUEST_CODE_COLLECT);*/
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        onClick();
+    }
+
     @OnClick(R.id.backClickArea)
     public void onClick() {//点击返回键退出
+        setResult(RESULT_OK,new Intent()
+                .putExtra(I.GoodsDetails.KEY_IS_COLLECT,isCollects)
+                .putExtra(I.GoodsDetails.KEY_GOODS_ID,goodsId));
         MFGT.finish(GoodsDetailsActivity.this);
     }
 
