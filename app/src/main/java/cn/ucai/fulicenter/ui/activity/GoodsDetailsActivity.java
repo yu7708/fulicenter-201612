@@ -1,6 +1,5 @@
 package cn.ucai.fulicenter.ui.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,11 +20,12 @@ import cn.ucai.fulicenter.model.bean.AlbumsBean;
 import cn.ucai.fulicenter.model.bean.GoodsDetailsBean;
 import cn.ucai.fulicenter.model.bean.MessageBean;
 import cn.ucai.fulicenter.model.bean.User;
+import cn.ucai.fulicenter.model.net.CartModel;
 import cn.ucai.fulicenter.model.net.GoodsModel;
+import cn.ucai.fulicenter.model.net.ICartModel;
 import cn.ucai.fulicenter.model.net.IGoodsModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.utils.CommonUtils;
-import cn.ucai.fulicenter.ui.adapter.CollectsAdapter;
 import cn.ucai.fulicenter.ui.view.FlowIndicator;
 import cn.ucai.fulicenter.ui.view.MFGT;
 import cn.ucai.fulicenter.ui.view.SlideAutoLoopView;
@@ -37,6 +37,7 @@ import cn.ucai.fulicenter.ui.view.fangdou.AntiShake;
 public class GoodsDetailsActivity extends AppCompatActivity {
     private static final String TAG = GoodsDetailsActivity.class.getSimpleName();
     IGoodsModel model;
+    ICartModel mModel;
     int goodsId = 0;
     @BindView(R.id.tvGoodsName)
     TextView tvGoodsName;
@@ -56,8 +57,8 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     GoodsDetailsBean bean;
     @BindView(R.id.ivGoodsCollect)
     ImageView ivGoodsCollect;
-    boolean isCollects=false;
-    AntiShake util=new AntiShake();
+    boolean isCollects = false;
+    AntiShake util = new AntiShake();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,6 +73,7 @@ public class GoodsDetailsActivity extends AppCompatActivity {
             return;
         }
         model = new GoodsModel();
+        mModel=new CartModel();
     }
 
     @Override
@@ -83,24 +85,24 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     private void initAddCollect() {
         User user = FuLiCenterApplication.getCurrentUser();
         if (user != null) {
-          collection(I.ACTION_IS_COLLECT,user);
+            collection(I.ACTION_IS_COLLECT, user);
         }
     }
 
     private void collection(final int action, User user) {
-        model.loadCollectStatus(GoodsDetailsActivity.this,action,goodsId, user.getMuserName(),
+        model.loadCollectStatus(GoodsDetailsActivity.this, action, goodsId, user.getMuserName(),
                 new OnCompleteListener<MessageBean>() {
                     @Override
                     public void onSuccess(MessageBean msg) {
                         if (msg != null && msg.isSuccess()) {
-                            isCollects=true;
-                            if(action==I.ACTION_DELETE_COLLECT){
-                                isCollects=false;
+                            isCollects = true;
+                            if (action == I.ACTION_DELETE_COLLECT) {
+                                isCollects = false;
                             }
-                        }else{
-                            isCollects=false;
-                            if(action==I.ACTION_DELETE_COLLECT){
-                                isCollects=true;
+                        } else {
+                            isCollects = false;
+                            if (action == I.ACTION_DELETE_COLLECT) {
+                                isCollects = true;
 
                             }
                         }
@@ -109,7 +111,7 @@ public class GoodsDetailsActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(String error) {
-                        isCollects=false;
+                        isCollects = false;
                         Toast.makeText(GoodsDetailsActivity.this, "添加失败", Toast.LENGTH_SHORT);
                     }
                 });
@@ -175,7 +177,7 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e(TAG,"onDestroy.isCollect:"+isCollects);
+        Log.e(TAG, "onDestroy.isCollect:" + isCollects);
 
     }
    /* startActivityForResult((Activity) activity,new Intent(activity, GoodsDetailsActivity.class)
@@ -189,26 +191,56 @@ public class GoodsDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.backClickArea)
     public void onClick() {//点击返回键退出
-        setResult(RESULT_OK,new Intent()
-                .putExtra(I.GoodsDetails.KEY_IS_COLLECT,isCollects)
-                .putExtra(I.GoodsDetails.KEY_GOODS_ID,goodsId));
+        setResult(RESULT_OK, new Intent()
+                .putExtra(I.GoodsDetails.KEY_IS_COLLECT, isCollects)
+                .putExtra(I.GoodsDetails.KEY_GOODS_ID, goodsId));
         MFGT.finish(GoodsDetailsActivity.this);
     }
 
     @OnClick(R.id.ivGoodsCollect)
     public void onCollect() {
-        if(util.check()) return;
-        User user=FuLiCenterApplication.getCurrentUser();
+        if (util.check()) return;
+        User user = FuLiCenterApplication.getCurrentUser();
+        if (user == null) {
+            MFGT.gotoLogin(GoodsDetailsActivity.this, 0);
+        } else {
+            if (isCollects) {
+                //取消收藏
+                collection(I.ACTION_DELETE_COLLECT, user);
+            } else {
+                //添加收藏
+                collection(I.ACTION_ADD_COLLECT, user);
+            }
+        }
+    }
+
+    @OnClick(R.id.iv_good_cart)
+    public void addCart() {
+        if(util.check())return;
+        User user = FuLiCenterApplication.getCurrentUser();
         if(user==null){
             MFGT.gotoLogin(GoodsDetailsActivity.this,0);
         }else{
-            if(isCollects){
-                //取消收藏
-                collection(I.ACTION_DELETE_COLLECT,user);
-            }else{
-                //添加收藏
-                collection(I.ACTION_ADD_COLLECT,user);
-            }
+            addGoodsToCart(user);
         }
+    }
+
+    private void addGoodsToCart(User user) {
+        mModel.cartAction(GoodsDetailsActivity.this, I.ACTION_CART_ADD, null, String.valueOf(goodsId),
+                user.getMuserName(), 1, new OnCompleteListener<MessageBean>() {
+                    @Override
+                    public void onSuccess(MessageBean result) {
+                        if(result!=null&&result.isSuccess()){
+                            CommonUtils.showShortToast(R.string.add_goods_success);
+                        }else{
+                            CommonUtils.showShortToast(R.string.add_goods_fail);
+                        }
+                    }
+                    @Override
+                    public void onError(String error) {
+                        CommonUtils.showShortToast(R.string.add_goods_fail);
+                        Log.e(TAG,"addGoodsToCart,onError="+error);
+                    }
+                });
     }
 }

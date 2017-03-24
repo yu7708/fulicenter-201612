@@ -34,6 +34,11 @@
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:src="@mipmap/bg_collect_in" />
+            <ImageView
+                android:id="@+id/iv_good_cart"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:src="@mipmap/bg_cart_selected"/>
         </LinearLayout>
     </LinearLayout>
     <TextView

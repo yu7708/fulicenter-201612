@@ -84,6 +84,7 @@ public class CatFilterCategoryButton extends Button {
     }
 
     public void initView(String groupName, ArrayList<CategoryChildBean> list) {
+        //要拿到大类的数组和小类的数组
         if(groupName==null || list==null){
             CommonUtils.showShortToast("小类数据异常");
             return;
