@@ -135,6 +135,7 @@ public class CollectActivity extends AppCompatActivity {
             @Override
             public void onSuccess(CollectBean[] result) {
                 setRefresh(false);
+                mAdapter.setMore(true);
                 Log.e(TAG, "onSuccess=" + result);
                 if (result != null && result.length > 0) {
                     ArrayList<CollectBean> list = ResultUtils.array2List(result);
@@ -145,6 +146,9 @@ public class CollectActivity extends AppCompatActivity {
                     if (mList.size() < I.PAGE_SIZE_DEFAULT) {
                         mAdapter.setMore(false);
                     }
+                    mAdapter.notifyDataSetChanged();
+                }else if(result==null &&result.length==0){
+                    mList.clear();
                     mAdapter.notifyDataSetChanged();
                 }
             }
