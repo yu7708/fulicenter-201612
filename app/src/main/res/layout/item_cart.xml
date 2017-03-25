@@ -4,8 +4,12 @@
     android:layout_height="65dp"
     android:background="@color/white"
     android:layout_marginTop="5dp"
-    android:layout_marginBottom="5dp">
-
+    android:layout_marginBottom="5dp"
+    >
+<RelativeLayout
+    android:id="@+id/relativeLayout_cart"
+    android:layout_width="match_parent"
+    android:layout_height="65dp">
     <CheckBox
         android:id="@+id/cb_cart_selected"
         android:layout_width="wrap_content"
@@ -73,4 +77,5 @@
         android:text="￥88.88"
         android:textSize="18sp"
         android:textColor="#f90"/>
+</RelativeLayout>
 </RelativeLayout>

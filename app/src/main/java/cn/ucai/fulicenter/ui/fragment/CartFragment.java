@@ -82,13 +82,10 @@ public class CartFragment extends Fragment {
     private void setListener() {
         setCountAddListener();
         setCountDelListener();
-        setUpdateCart();
         setItemPrice();
         PullDown();
+    }
 
-    }
-    private void setUpdateCart() {
-    }
 
     private void setItemPrice() {
         mAdapter.setListener(new CompoundButton.OnCheckedChangeListener() {

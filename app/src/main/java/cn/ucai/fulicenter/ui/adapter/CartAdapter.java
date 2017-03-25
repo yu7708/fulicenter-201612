@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class CartAdapter extends RecyclerView.Adapter {
     Context context;
     List<CartBean> mList;
     CompoundButton.OnCheckedChangeListener listener;
-    View.OnClickListener countAddListener,countDelListener;
+    View.OnClickListener countAddListener, countDelListener;
     public CartAdapter(Context context, List<CartBean> mList) {
         this.context = context;
         this.mList = mList;
@@ -45,16 +46,17 @@ public class CartAdapter extends RecyclerView.Adapter {
         this.countDelListener = countDelListener;
     }
 
+
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = View.inflate(context, R.layout.item_cart, null);
-        ViewHolder holder= new CartViewHolder(view);
+        ViewHolder holder = new CartViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder parentHolder, int position) {
-        CartViewHolder holder= (CartViewHolder) parentHolder;
+    public void onBindViewHolder(ViewHolder parentHolder, int position) {
+        CartViewHolder holder = (CartViewHolder) parentHolder;
         holder.bind(position);
     }
 
@@ -63,7 +65,7 @@ public class CartAdapter extends RecyclerView.Adapter {
         return mList != null ? mList.size() : 0;
     }
 
-    class CartViewHolder extends ViewHolder{
+    class CartViewHolder extends ViewHolder {
         @BindView(R.id.cb_cart_selected)
         CheckBox cbCartSelected;
         @BindView(R.id.iv_cart_thumb)
@@ -78,7 +80,6 @@ public class CartAdapter extends RecyclerView.Adapter {
         ImageView ivCartDel;
         @BindView(R.id.tv_cart_price)
         TextView tvCartPrice;
-
         CartViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
@@ -86,15 +87,15 @@ public class CartAdapter extends RecyclerView.Adapter {
 
         public void bind(int position) {
             CartBean bean = mList.get(position);
-            tvCartCount.setText("("+bean.getCount()+")");
+            tvCartCount.setText("(" + bean.getCount() + ")");
             cbCartSelected.setChecked(bean.isChecked());//直接true,点击就不会商品的添加不变
-            GoodsDetailsBean goods=bean.getGoods();
+            GoodsDetailsBean goods = bean.getGoods();
             ivCartAdd.setTag(bean);
             ivCartDel.setTag(bean);
             ivCartAdd.setOnClickListener(countAddListener);
             ivCartDel.setOnClickListener(countDelListener);
-            if(goods!=null){
-                ImageLoader.downloadImg(context,ivCartThumb,goods.getGoodsThumb());
+            if (goods != null) {
+                ImageLoader.downloadImg(context, ivCartThumb, goods.getGoodsThumb());
                 tvCartGoodName.setText(goods.getGoodsName());
                 tvCartPrice.setText(goods.getCurrencyPrice());
             }
