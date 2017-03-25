@@ -42,6 +42,7 @@ public class CartModel implements ICartModel{
     utils.setRequestUrl(I.REQUEST_UPDATE_CART)
             .addParam(I.Cart.ID,cartId)
             .addParam(I.Cart.COUNT,count+"")
+            .addParam(I.Cart.IS_CHECKED,0+"")
             .targetClass(MessageBean.class)
             .execute(listener);
     }

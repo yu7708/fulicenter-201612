@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,10 +26,23 @@ import cn.ucai.fulicenter.model.utils.ImageLoader;
 public class CartAdapter extends RecyclerView.Adapter {
     Context context;
     List<CartBean> mList;
-
+    CompoundButton.OnCheckedChangeListener listener;
+    View.OnClickListener countAddListener,countDelListener;
     public CartAdapter(Context context, List<CartBean> mList) {
         this.context = context;
         this.mList = mList;
+    }
+
+    public void setListener(CompoundButton.OnCheckedChangeListener listener) {
+        this.listener = listener;
+    }
+
+    public void setCountAddListener(View.OnClickListener countAddListener) {
+        this.countAddListener = countAddListener;
+    }
+
+    public void setCountDelListener(View.OnClickListener countDelListener) {
+        this.countDelListener = countDelListener;
     }
 
     @Override
@@ -73,13 +87,20 @@ public class CartAdapter extends RecyclerView.Adapter {
         public void bind(int position) {
             CartBean bean = mList.get(position);
             tvCartCount.setText("("+bean.getCount()+")");
+            cbCartSelected.setChecked(bean.isChecked());//直接true,点击就不会商品的添加不变
             GoodsDetailsBean goods=bean.getGoods();
+            ivCartAdd.setTag(bean);
+            ivCartDel.setTag(bean);
+            ivCartAdd.setOnClickListener(countAddListener);
+            ivCartDel.setOnClickListener(countDelListener);
             if(goods!=null){
                 ImageLoader.downloadImg(context,ivCartThumb,goods.getGoodsThumb());
                 tvCartGoodName.setText(goods.getGoodsName());
                 tvCartPrice.setText(goods.getCurrencyPrice());
-                cbCartSelected.setChecked(true);
             }
+            cbCartSelected.setTag(position);//传个position好判断是哪个被选中
+            cbCartSelected.setOnCheckedChangeListener(listener);
+            //提取出了全局的点击事件,设置成setter,是为了外面能调么
         }
     }
 }

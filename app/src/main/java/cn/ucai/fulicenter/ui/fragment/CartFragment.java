@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,7 +22,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.FuLiCenterApplication;
+import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.CartBean;
+import cn.ucai.fulicenter.model.bean.GoodsDetailsBean;
+import cn.ucai.fulicenter.model.bean.MessageBean;
 import cn.ucai.fulicenter.model.bean.User;
 import cn.ucai.fulicenter.model.net.CartModel;
 import cn.ucai.fulicenter.model.net.ICartModel;
@@ -57,6 +61,7 @@ public class CartFragment extends Fragment {
     ArrayList<CartBean> cartList=new ArrayList<>();
     LinearLayoutManager mManager;
     CartAdapter mAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,12 +74,35 @@ public class CartFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mModel = new CartModel();
-        initData();
         initView();
+        initData();
         setListener();
     }
 
     private void setListener() {
+        setCountAddListener();
+        setCountDelListener();
+        setUpdateCart();
+        setItemPrice();
+        PullDown();
+
+    }
+    private void setUpdateCart() {
+    }
+
+    private void setItemPrice() {
+        mAdapter.setListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                int position= (int) buttonView.getTag();
+                Log.e(TAG,"setListener,onCheckedChanged="+isChecked+"position=  "+position);
+                cartList.get(position).setChecked(isChecked);//列表的哪一项被点击监听到
+                setPriceText();
+            }
+        });
+    }
+
+    private void PullDown() {
         srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -83,6 +111,75 @@ public class CartFragment extends Fragment {
             }
         });
     }
+
+    private void setCountAddListener(){
+        mAdapter.setCountAddListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final CartBean bean= (CartBean) v.getTag();
+                mModel.cartAction(getContext(), I.ACTION_CART_UPDATA, bean.getId() + "", null, null, bean.getCount()
+                        , new OnCompleteListener<MessageBean>() {
+                            @Override
+                            public void onSuccess(MessageBean result) {
+                                Log.e(TAG,"setCountAddListener,Count="+bean.getCount());
+                                if(result!=null&&result.isSuccess()){
+                                    bean.setCount(bean.getCount()+1);
+                                    mAdapter.notifyDataSetChanged();
+                                    Log.e(TAG,"setCountAddListener,getCountAfterAdd="+bean.getCount());
+//                                        showCartList();
+                                }
+                            }
+                            @Override
+                            public void onError(String error) {
+
+                            }
+                        });
+            }
+        });
+    }
+    private void setCountDelListener() {
+        mAdapter.setCountDelListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final CartBean bean= (CartBean) v.getTag();
+                if(bean.getCount()>1){
+                    mModel.cartAction(getContext(), I.ACTION_CART_UPDATA, bean.getId() + "", null, null, bean.getCount()
+                            , new OnCompleteListener<MessageBean>() {
+                                @Override
+                                public void onSuccess(MessageBean result) {
+                                    Log.e(TAG,"setCountAddListener,Count="+bean.getCount());
+                                    if(result!=null&&result.isSuccess()){
+                                        bean.setCount(bean.getCount()-1);
+                                        mAdapter.notifyDataSetChanged();
+                                        Log.e(TAG,"setCountAddListener,getCountAfterDel="+bean.getCount());
+//                                    showCartList();
+                                    }
+                                }
+                                @Override
+                                public void onError(String error) {
+
+                                }
+                            });}
+                else if(bean.getCount()==1){
+                    mModel.cartAction(getContext(), I.ACTION_CART_DEL, bean.getId()+"", null, null, 1,
+                            new OnCompleteListener<MessageBean>() {
+                                @Override
+                                public void onSuccess(MessageBean result) {
+                                    if(result!=null&&result.isSuccess()){
+                                        //mAdapter.notifyDataSetChanged();
+                                        showCartList();
+                                    }
+                                }
+                                @Override
+                                public void onError(String error) {
+
+                                }
+                            });
+                }
+            }
+        });
+    }
+
     public void setRefresh(boolean refresh) {
         srl.setRefreshing(refresh);
         tvRefresh.setVisibility(refresh?View.VISIBLE:View.GONE);
@@ -101,17 +198,18 @@ public class CartFragment extends Fragment {
                 getResources().getColor(R.color.google_red),
                 getResources().getColor(R.color.google_yellow)
         );
-            mManager=new LinearLayoutManager(getContext());
+        mManager=new LinearLayoutManager(getContext());
         rv.setLayoutManager(mManager);
         rv.setHasFixedSize(true);//不是很懂这句话什么意思
         mAdapter=new CartAdapter(getContext(),cartList);
         rv.setAdapter(mAdapter);
         rv.addItemDecoration(new SpaceItemDecoration(12));
         setCartListerLayout(false);
+        setPriceText();
     }
 
     private void initData() {
-         user= FuLiCenterApplication.getCurrentUser();
+        user= FuLiCenterApplication.getCurrentUser();
         if(user!=null){
             showCartList();
         }
@@ -143,6 +241,32 @@ public class CartFragment extends Fragment {
                     }
                 });
     }
+    public void setPriceText(){//放在初始化中
+        int sumPrice=0;//总数
+        int RankPrice=0;//折扣总数
+        for (CartBean cart:cartList){
+            if (cart.isChecked()) {//如果选中,再计算价格
+                GoodsDetailsBean goods=cart.getGoods();
+                if(goods!=null){
+                    sumPrice += getPrice(goods.getCurrencyPrice())*cart.getCount();//一条商品总价格
+                    RankPrice += getPrice(goods.getRankPrice())*cart.getCount();//折扣价格
+                }
+            }
+            tvCartSumPrice.setText("合计:￥"+sumPrice);//显示实价
+            tvCartSavePrice.setText("节省:￥"+(sumPrice-RankPrice));//节省了多少钱
+        }
 
+    }
+    private int getPrice(String p){//截取的字符是字符串,还得转换成int类型
+        String pStr = p.substring(p.indexOf("￥") + 1);
+        return Integer.valueOf(pStr);
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        showCartList();
+    }
 }
+
+
