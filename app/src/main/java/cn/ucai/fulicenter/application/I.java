@@ -65,7 +65,6 @@ public interface I {
     int ACTION_CART_DEL = 2;
     int ACTION_CART_UPDATA = 3;
 
-
     interface Goods {
         String KEY_RESULT = "result";
         String RESPONSE_SUCCESS = "success";

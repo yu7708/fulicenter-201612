@@ -16,6 +16,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.CartBean;
 import cn.ucai.fulicenter.model.bean.GoodsDetailsBean;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
@@ -86,12 +87,18 @@ public class CartAdapter extends RecyclerView.Adapter {
         }
 
         public void bind(int position) {
+            cbCartSelected.setOnCheckedChangeListener(null);//改了后就不会有移出屏外,勾选刷新的问题
             CartBean bean = mList.get(position);
             tvCartCount.setText("(" + bean.getCount() + ")");
             cbCartSelected.setChecked(bean.isChecked());//直接true,点击就不会商品的添加不变
             GoodsDetailsBean goods = bean.getGoods();
-            ivCartAdd.setTag(bean);
-            ivCartDel.setTag(bean);
+           // ivCartAdd.setTag(bean);
+            //ivCartDel.setTag(bean);
+            //暂除
+         ivCartAdd.setTag(position);
+            ivCartDel.setTag(position);
+              /* ivCartAdd.setTag(R.id.action_add_cart,1);
+            ivCartDel.setTag(R.id.action_del_cart,-1);*/
             ivCartAdd.setOnClickListener(countAddListener);
             ivCartDel.setOnClickListener(countDelListener);
             if (goods != null) {

@@ -82,8 +82,13 @@ public class CartFragment extends Fragment {
     private void setListener() {
         setCountAddListener();
         setCountDelListener();
+        setUpdate();
         setItemPrice();
         PullDown();
+    }
+
+    private void setUpdate() {
+
     }
 
 
@@ -110,19 +115,23 @@ public class CartFragment extends Fragment {
     }
 
     private void setCountAddListener(){
-        mAdapter.setCountAddListener(new View.OnClickListener() {
+       mAdapter.setCountAddListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final CartBean bean= (CartBean) v.getTag();
-                mModel.cartAction(getContext(), I.ACTION_CART_UPDATA, bean.getId() + "", null, null, bean.getCount()
+                final int position= (int) v.getTag();
+                final CartBean bean=cartList.get(position);
+               // final CartBean bean= (CartBean) v.getTag();
+                mModel.cartAction(getContext(), I.ACTION_CART_UPDATA, bean.getId() + "", null, null, bean.getCount()+1
                         , new OnCompleteListener<MessageBean>() {
                             @Override
                             public void onSuccess(MessageBean result) {
                                 Log.e(TAG,"setCountAddListener,Count="+bean.getCount());
                                 if(result!=null&&result.isSuccess()){
                                     bean.setCount(bean.getCount()+1);
-                                    mAdapter.notifyDataSetChanged();
+                                   // mAdapter.notifyDataSetChanged();
+                                    mAdapter.notifyItemChanged(position);
                                     Log.e(TAG,"setCountAddListener,getCountAfterAdd="+bean.getCount());
+                                    setPriceText();
 //                                        showCartList();
                                 }
                             }
@@ -138,17 +147,21 @@ public class CartFragment extends Fragment {
         mAdapter.setCountDelListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final CartBean bean= (CartBean) v.getTag();
+                final int position= (int) v.getTag();
+                final CartBean bean=cartList.get(position);
+                //final CartBean bean= (CartBean) v.getTag();
                 if(bean.getCount()>1){
-                    mModel.cartAction(getContext(), I.ACTION_CART_UPDATA, bean.getId() + "", null, null, bean.getCount()
+                    mModel.cartAction(getContext(), I.ACTION_CART_UPDATA, bean.getId() + "", null, null, bean.getCount()-1
                             , new OnCompleteListener<MessageBean>() {
                                 @Override
                                 public void onSuccess(MessageBean result) {
                                     Log.e(TAG,"setCountAddListener,Count="+bean.getCount());
                                     if(result!=null&&result.isSuccess()){
                                         bean.setCount(bean.getCount()-1);
-                                        mAdapter.notifyDataSetChanged();
+                                       // mAdapter.notifyDataSetChanged();
+                                        mAdapter.notifyItemChanged(position);
                                         Log.e(TAG,"setCountAddListener,getCountAfterDel="+bean.getCount());
+                                        setPriceText();
 //                                    showCartList();
                                     }
                                 }
@@ -164,6 +177,8 @@ public class CartFragment extends Fragment {
                                 public void onSuccess(MessageBean result) {
                                     if(result!=null&&result.isSuccess()){
                                         //mAdapter.notifyDataSetChanged();
+                                        mAdapter.notifyItemRemoved(position);
+                                        mAdapter.notifyItemRangeChanged(position,cartList.size()-position-1);
                                         showCartList();
                                     }
                                 }
