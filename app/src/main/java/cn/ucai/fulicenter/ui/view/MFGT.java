@@ -18,6 +18,7 @@ import cn.ucai.fulicenter.ui.activity.LoginActivity;
 import cn.ucai.fulicenter.ui.activity.MainActivity;
 import cn.ucai.fulicenter.ui.activity.RegisterActivity;
 import cn.ucai.fulicenter.ui.activity.SettingsActivity;
+import cn.ucai.fulicenter.ui.activity.SongHuoActivity;
 import cn.ucai.fulicenter.ui.activity.UpdateNickActivity;
 
 /**
@@ -83,5 +84,10 @@ public class MFGT {
 
     public static void gotoCollection(Context activity) {
         startActivity((Activity) activity,CollectActivity.class);
+    }
+
+    public static void gotoSongHuo(Activity activity, int rankPrice) {
+       startActivityForResult(activity,new Intent(activity,SongHuoActivity.class)
+       .putExtra(I.ORDER_BUY_PRICE,rankPrice),I.REQUEST_CODE_ORDER);
     }
 }

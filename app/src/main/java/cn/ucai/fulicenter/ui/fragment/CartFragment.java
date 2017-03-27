@@ -30,9 +30,12 @@ import cn.ucai.fulicenter.model.bean.User;
 import cn.ucai.fulicenter.model.net.CartModel;
 import cn.ucai.fulicenter.model.net.ICartModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
+import cn.ucai.fulicenter.model.utils.CommonUtils;
+import cn.ucai.fulicenter.model.utils.ConvertUtils;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
 import cn.ucai.fulicenter.model.utils.ResultUtils;
 import cn.ucai.fulicenter.ui.adapter.CartAdapter;
+import cn.ucai.fulicenter.ui.view.MFGT;
 import cn.ucai.fulicenter.ui.view.SpaceItemDecoration;
 
 /**
@@ -61,7 +64,8 @@ public class CartFragment extends Fragment {
     ArrayList<CartBean> cartList=new ArrayList<>();
     LinearLayoutManager mManager;
     CartAdapter mAdapter;
-
+    int sumPrice;
+    int RankPrice;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -85,6 +89,20 @@ public class CartFragment extends Fragment {
         setUpdate();
         setItemPrice();
         PullDown();
+        setGoToBuy();
+    }
+
+    private void setGoToBuy() {
+        tvCartBuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(RankPrice>0){
+                MFGT.gotoSongHuo(getActivity(),user.getMavatarId());
+                }else{
+                    CommonUtils.showShortToast(R.string.order_nothing);
+                }
+            }
+        });
     }
 
     private void setUpdate() {
@@ -128,8 +146,8 @@ public class CartFragment extends Fragment {
                                 Log.e(TAG,"setCountAddListener,Count="+bean.getCount());
                                 if(result!=null&&result.isSuccess()){
                                     bean.setCount(bean.getCount()+1);
-                                   // mAdapter.notifyDataSetChanged();
-                                    mAdapter.notifyItemChanged(position);
+                                    mAdapter.notifyDataSetChanged();
+                                  //  mAdapter.notifyItemChanged(position);
                                     Log.e(TAG,"setCountAddListener,getCountAfterAdd="+bean.getCount());
                                     setPriceText();
 //                                        showCartList();
@@ -158,8 +176,8 @@ public class CartFragment extends Fragment {
                                     Log.e(TAG,"setCountAddListener,Count="+bean.getCount());
                                     if(result!=null&&result.isSuccess()){
                                         bean.setCount(bean.getCount()-1);
-                                       // mAdapter.notifyDataSetChanged();
-                                        mAdapter.notifyItemChanged(position);
+                                       mAdapter.notifyDataSetChanged();
+                                        //mAdapter.notifyItemChanged(position);
                                         Log.e(TAG,"setCountAddListener,getCountAfterDel="+bean.getCount());
                                         setPriceText();
 //                                    showCartList();
@@ -176,8 +194,8 @@ public class CartFragment extends Fragment {
                                 @Override
                                 public void onSuccess(MessageBean result) {
                                     if(result!=null&&result.isSuccess()){
-                                        //mAdapter.notifyDataSetChanged();
-                                        mAdapter.notifyItemRemoved(position);
+                                        mAdapter.notifyDataSetChanged();
+                                        //mAdapter.notifyItemRemoved(position);
                                         mAdapter.notifyItemRangeChanged(position,cartList.size()-position-1);
                                         showCartList();
                                     }
@@ -254,8 +272,8 @@ public class CartFragment extends Fragment {
                 });
     }
     public void setPriceText(){//放在初始化中
-        int sumPrice=0;//总数
-        int RankPrice=0;//折扣总数
+        sumPrice=0;//总数
+        RankPrice=0;//折扣总数
         for (CartBean cart:cartList){
             if (cart.isChecked()) {//如果选中,再计算价格
                 GoodsDetailsBean goods=cart.getGoods();
